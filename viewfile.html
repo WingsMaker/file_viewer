@@ -1,0 +1,42 @@
+<html>
+<head>
+<title>Binary Viewer</title>
+<link rel="icon" href="kh.ico" type="image/x-icon">
+<script type="text/javascript" src="jquery.min.js"></script>
+</head>
+<body>
+<h3>File Viewer</h3>
+<p>This is for binary file viewer</p>
+<hr>
+<input type="file" id="file-input" accept=".*">
+<hr>
+<textarea id="file-content" cols="80" rows="50" readonly></textarea>
+<hr>
+<pre>Powered by Kim Huat</pre>
+</body>
+
+<script type="text/javascript">
+const fileInput = document.getElementById('file-input');
+const fileContent = document.getElementById('file-content');
+fileInput.addEventListener('change', handleFileChange);
+
+function handleFileChange(event) {
+  const file = event.target.files[0];
+  // Check if a file is selected
+  if (file) {
+    const reader = new FileReader();
+    reader.readAsArrayBuffer(file);
+    reader.onload = function(e) {
+      const arrayBuffer = e.target.result;
+      // Convert arrayBuffer to a string (each byte is displayed as hex)
+      const content = Array.from(new Uint8Array(arrayBuffer))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join(' ');
+      fileContent.value = content;
+    };
+  } else {
+    fileContent.value = 'No file selected.';
+  }
+}
+</script>
+</html>
